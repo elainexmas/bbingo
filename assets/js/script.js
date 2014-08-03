@@ -1,32 +1,48 @@
 $(document).ready(function(){
+    var options = [];
+    var frequencies = [];
+
+    function loadData() {
+        return $.ajax({
+            type: "GET",
+            url: "data.txt",
+            dataType: "text"
+        });
+    }
+    
+    function processData(allText){
+        var allTextLines = allText.split(/\n/);
+        var lines = [];
+        
+        for(var i = 0; i < allTextLines.length; i++){
+            var data = allTextLines[i].split(',');
+            options.push(data[0]);
+            frequencies.push(data[1]);
+        }
+    }
+
     var usedArray;
     var baseArray = [];
     var clickedCells = [];
-
-    var options = new Array("foo", "bar", "baz", "blorp", "chompy")
-    var frequencies = new Array(1,2,3,4,5)
-
-    var number = 0;
-    var base = 0;
    
-    init();
-   
+    loadData().done(processData).done(init);
+
     function init(){
         prepareBaseArray();
-        for(var i = 0; i<25; i++){
-            fillCard(i);
-        }
-    }	  	 
-    function fillCard(i){
-        number = Math.floor(Math.random()*baseArray.length);
+        fillCard();
+    }
 
-        if(usedArray[number] != true){
-            var name = baseArray[number];
-            $('#cell'+i).html(name);
-	    usedArray[number] = true;
-	} else {
-	    fillCard(i);
-        }   
+    function fillCard(){
+        var i = 0;
+        while(i < 25){
+            number = Math.floor(Math.random()*baseArray.length);
+            if(usedArray[number] != true){
+                var name = baseArray[number];
+                $('#cell'+i).html(name);
+                usedArray[number] = true;
+                i++;
+            }
+        }
     }
     
     function prepareBaseArray(){
@@ -43,74 +59,69 @@ $(document).ready(function(){
             }
         }
         usedArray = new Array(baseArray.length);
-
     }
     
-    function resetUsedNumbersArray(){
-        for(var j = 0; j < usedArray.length; j++){
-            usedArray[j] = false;
-        }	
-    }
-	 
     function resetCells(){
         var cells = document.getElementsByTagName("TD");
         for (i = 0; i < cells.length; i++){
-            cells[i].style.backgroundColor = "#eee";
-            cells[i].style.color = "#333";
+            if(cells[i].id != "free"){
+                cells[i].style.backgroundColor = "#eee";
+                cells[i].style.color = "#333";
+            }
         }
         clickedCells = [];
     }
 
     $('#newCard').click(function(){
-        resetUsedNumbersArray();
-	init();
-        resetCells();
+        //resetCells();
+        //usedArray = new Array(baseArray.length);
+        //fillCard();
+        location.reload();
     });
 	 
     $('td').click(function(){
-	var toggle = this.style;
-	toggle.backgroundColor = toggle.backgroundColor? "":"#333";
-	toggle.color = toggle.color? "":"#fff";
+        if(this.id != "end"){
+            var toggle = this.style;
+            toggle.backgroundColor = toggle.backgroundColor? "":"#333";
+            toggle.color = toggle.color? "":"#fff";
 
-        // add logic
-        clickedCells.push(this.id);
-        hasWon = checkForWin();
-        if(hasWon)
-            alert("BINGO");
-    });
-
+            // add logic
+            clickedCells.push(this.id);
+            checkForWin();
+        }
+   })
+ 
     function checkForWin(){
         // diagonals
         if(clickedCells.indexOf("cell0") > -1 && clickedCells.indexOf("cell6") > -1 && clickedCells.indexOf("cell18") > -1 && clickedCells.indexOf("cell24") > -1){
-            return true;
+            alert("BINGO!")
         }
         if(clickedCells.indexOf("cell20") > -1 && clickedCells.indexOf("cell16") > -1 && clickedCells.indexOf("cell8") > -1 && clickedCells.indexOf("cell4") > -1)
-            return true;
-        // rows
+            alert("BINGO!")
+       // rows
         if(clickedCells.indexOf("cell0") > -1 && clickedCells.indexOf("cell5") > -1 && clickedCells.indexOf("cell10") > -1 && clickedCells.indexOf("cell15") > -1 && clickedCells.indexOf("cell20") > -1)
-            return true;
+            alert("BINGO!")
         if(clickedCells.indexOf("cell1") > -1 && clickedCells.indexOf("cell6") > -1 && clickedCells.indexOf("cell11") > -1 && clickedCells.indexOf("cell16") > -1 && clickedCells.indexOf("cell21") > -1)
-            return true;
+            alert("BINGO!")
+            
         if(clickedCells.indexOf("cell2") > -1 && clickedCells.indexOf("cell7") > -1 && clickedCells.indexOf("cell17") > -1 && clickedCells.indexOf("cell22") > -1)
-            return true;
+            alert("BINGO!")
         if(clickedCells.indexOf("cell3") > -1 && clickedCells.indexOf("cell8") > -1 && clickedCells.indexOf("cell13") > -1 && clickedCells.indexOf("cell18") > -1 && clickedCells.indexOf("cell23") > -1)
-            return true;
+            alert("BINGO!")
         if(clickedCells.indexOf("cell4") > -1 && clickedCells.indexOf("cell9") > -1 && clickedCells.indexOf("cell14") > -1 && clickedCells.indexOf("cell19") > -1 && clickedCells.indexOf("cell24") > -1)
-            return true;
+            alert("BINGO!")
 
         // columns
         if(clickedCells.indexOf("cell0") > -1 && clickedCells.indexOf("cell1") > -1 && clickedCells.indexOf("cell2") > -1 && clickedCells.indexOf("cell3") > -1 && clickedCells.indexOf("cell4") > -1)
-            return true;
+            alert("BINGO!")
         if(clickedCells.indexOf("cell5") > -1 && clickedCells.indexOf("cell6") > -1 && clickedCells.indexOf("cell7") > -1 && clickedCells.indexOf("cell8") > -1 && clickedCells.indexOf("cell9") > -1)
-            return true;
-        if(clickedCells.indexOf("cel10") > -1 && clickedCells.indexOf("cell11") > -1 && clickedCells.indexOf("cell13") > -1 && clickedCells.indexOf("cell14") > -1)
-            return true;
-        if(clickedCells.indexOf("cell15") > -1 && clickedCells.indexOf("cell6") > -1 && clickedCells.indexOf("cell17") > -1 && clickedCells.indexOf("cell18") > -1 && clickedCells.indexOf("cell19") > -1)
-            return true;
+            alert("BINGO!")
+        if(clickedCells.indexOf("cell10") > -1 && clickedCells.indexOf("cell11") > -1 && clickedCells.indexOf("cell13") > -1 && clickedCells.indexOf("cell14") > -1)
+            alert("BINGO!")
+        if(clickedCells.indexOf("cell15") > -1 && clickedCells.indexOf("cell16") > -1 && clickedCells.indexOf("cell17") > -1 && clickedCells.indexOf("cell18") > -1 && clickedCells.indexOf("cell19") > -1)
+            alert("BINGO!")
         if(clickedCells.indexOf("cell20") > -1 && clickedCells.indexOf("cell21") > -1 && clickedCells.indexOf("cell22") > -1 && clickedCells.indexOf("cell23") > -1 && clickedCells.indexOf("cell24") > -1)
-            return true;
-        return false;
-        
+            alert("BINGO!")
     }
     
 });

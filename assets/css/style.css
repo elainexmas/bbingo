@@ -1,6 +1,7 @@
 #page{
-width:455px;
+width:600px;
 margin:0 auto;
+/*background-color: #434043;*/
 }
 
 td{
@@ -15,16 +16,15 @@ background-color:#eee;
 }
 
 .bingohead{
-border:10px solid #c2324c;
+border:10px solid #434043;
 }
 
 h1, h3, h3 a{
 	font-family:arial;
 	text-align:center;
 	padding:3px;
-	color:#211111;
-	background-color:#EEEEEE;
-	border:2px solid #DDDDCC;
+	color:#FFC425;
+        /*border:2px solid #DDDDCC;*/
 }
 
 td{
@@ -32,7 +32,8 @@ cursor:pointer;
 }
 
 #free{
-	background-color:#fff;
-	color:#eee;
-	cursor:default;
+	background-color:#FFCF01;
+	color:#333;
+        text-transform: uppercase;
+        cursor:default;
 }

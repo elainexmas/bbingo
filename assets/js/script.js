@@ -16,6 +16,12 @@ $(document).ready(function(){
         
         for(var i = 0; i < allTextLines.length; i++){
             var data = allTextLines[i].split(',');
+            if (data.length != 2) {
+            	if (allTextLines[i].length > 0) {
+            	    console.log('Skipping invalid line:', allTextLines[i]);
+            	}
+            	continue;
+            }
             options.push(data[0]);
             frequencies.push(data[1]);
         }
